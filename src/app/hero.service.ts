@@ -95,6 +95,28 @@ export class HeroService {
       );
     }
 
+    /**
+     * The heroes web API expects a special header in HTTP save requests.
+     * That header is in the httpOptions constant defined in the HeroService.
+     */
+    httpOptions = {
+      headers: new HttpHeaders({'Content-Type': 'application/json'})
+    };
+
+    /** PUT: update the hero on the Server
+     * 
+     * The HttpClient.put() method takes three parameters:
+     * THE URL - is unchanged
+     * the data to update(the modified hero in this case)
+     * options
+     */
+    updateHero(hero: Hero): Observable<any> {
+      return this.http.put(this.heroesUrl, hero, this.httpOptions).pipe(
+        tap(_ => this.log(`updated hero id=${hero.id}`)),
+        catchError(this.handleError<any>('updateHero'))
+      );
+    }
+
     /** Log a heroservice message with the MessageService */
     private log(message: string) {
       this.messageService.add(`HeroService: ${message}`);
