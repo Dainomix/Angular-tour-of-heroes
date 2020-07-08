@@ -117,6 +117,21 @@ export class HeroService {
       );
     }
 
+    /** POST: add a new hero to the server 
+     * 
+     * it calls HttpClient.post() instead of put().
+     * 
+     * it expects the server to generate an id for the new hero, which it returns in the Observable<Hero>
+     * to the caller 
+     * 
+     */
+    addHero(hero: Hero): Observable<Hero> {
+      return this.http.post<Hero>(this.heroesUrl, hero, this.httpOptions).pipe(
+        tap((newHero: Hero) => this.log(`added hero w/ id=${newHero.id}`)),
+        catchError(this.handleError<Hero>('addHero'))
+      );
+    }
+
     /** Log a heroservice message with the MessageService */
     private log(message: string) {
       this.messageService.add(`HeroService: ${message}`);
