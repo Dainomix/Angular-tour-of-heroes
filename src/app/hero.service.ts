@@ -132,6 +132,24 @@ export class HeroService {
       );
     }
 
+    /**
+     * DELETE: delete the hero from the server
+     * 
+     * deleteHero() calls HttpClient.delete()
+     * The URL is the heroes resource URL + the id of the hero to delete
+     * i don't send data as i did with put() and post()
+     * i still send the httpOptions
+     */
+    deleteHero(hero: Hero | number): Observable<Hero> {
+      const id = typeof hero === 'number' ? hero : hero.id;
+      const url = `${this.heroesUrl}/${id}`;
+
+      return this.http.delete<Hero>(url, this.httpOptions).pipe(
+        tap(_ => this.log(`deleted hero id=${id}`)),
+        catchError(this.handleError<Hero>('deleteHero'))
+      );
+    }
+    
     /** Log a heroservice message with the MessageService */
     private log(message: string) {
       this.messageService.add(`HeroService: ${message}`);
